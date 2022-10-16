@@ -52,6 +52,7 @@ else:
     previewsoundfilepath = input('Sound file path for preview (.wav):')
 framefilepath = input('Frame folder directory:')
 savefilepath = input('Frame output path:')
+downsamplingmultiple = int(input('Downsampling multiple (1 is usually best):'))
 
 #Load sound preview
 wave_object = sa.WaveObject.from_wave_file(previewsoundfilepath)
@@ -65,18 +66,19 @@ samplerate, data = read(soundfilePath)
 length = data.shape[0] / samplerate
 monodata = (abs(data[:,0]) + abs(data[:,1])) / 2
 frames = int(len(os.listdir(framefilepath)))
-datawindow = int(len(monodata) / frames)
+datawindow = int(len(monodata) / (frames / downsamplingmultiple))
 averageperframe = []
 highestvalue = 0
 lowestvalue = int(monodata[0])
 #Calculate average per frame
-for i in range(0, frames):
+for i in range(0, int(frames / downsamplingmultiple)):
     average = int(sum(monodata[(i * datawindow): ((i + 1)*datawindow)]) / datawindow)
     if average < lowestvalue and average != 0:
         lowestvalue = average
     if average > highestvalue:
         highestvalue = average
-    averageperframe.append(average)
+    for x in range(0, downsamplingmultiple):
+        averageperframe.append(average)
 #Subtract lowest value so floor is at 0
 for i in range(0, frames):
     averageperframe[i] -= lowestvalue
