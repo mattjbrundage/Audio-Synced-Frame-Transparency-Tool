@@ -1,4 +1,4 @@
-# audio-synced-frame-transparency
+# Audio-Synced-Frame-Transparency-Tool
 Audio-synced video frame transparency tool
 
 Made this for some animations I made to sync visual affects to music by adjusting the alpha values of video frames variably based on the wave data of a sound file after some filtering to guide the results.
